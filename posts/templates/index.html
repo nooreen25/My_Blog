@@ -1,0 +1,102 @@
+{% load staticfiles %}
+
+<html>
+
+<head>
+
+<title>{% block head_title %}Django{% endblock head_title %}</title>
+<meta name="viewport" content="width=device-width initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
+<link rel='stylesheet' href='{% static "css/base.css" %}'/>
+<style>
+{% block style %}
+{% endblock style %}
+</style>
+</head>
+
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+{% if messages %}
+   <div class='messages'>
+ 
+   <ul class="messages">   
+ 	 {% for message in messages %}
+	 <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{% if "html_safe" in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}</li>
+	 {% endfor %}
+   </ul>
+   </div>
+{% endif %}
+
+
+
+<div class='col-sm-6 col-sm-offset-3'>
+  <h1>{{ title }}</h1>
+<form method='GET' action=''>
+  <input type='text' name='q' placeholder='search posts'>
+  <input type='submit' value='search'>
+</form>
+
+{% for obj in object_list %}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="thumbnail">
+      {% if obj.image %}
+      <img src='{{ obj.image.url }}' class='img-responsive' />
+      {% endif %} 
+      <div class="caption">
+        <h3><a href='/posts/{{ obj.id }}/'>{{ obj.title }}</a><small>  {{ obj.publish | timesince }}</small> ago</h3>
+        <p>{{ obj.content | linebreaks | truncatechars:120 }}</p>
+        <p><a href="/posts/{{ obj.id }}/" class="btn btn-primary" role="button">View</a> </p>
+      </div>
+    </div>
+  </div>
+<hr />
+</div>
+
+{% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?page={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+             {{ object_list.number }}  {{ object_list.paginator.num_pages }}
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>  
+</div>
+
+
+<div class='container'>
+{% block content %}
+
+{% endblock content %}
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
+
+
+
+<!-- Latest compiled and minified JavaScript -->
