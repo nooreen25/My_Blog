@@ -26,6 +26,8 @@ from rest_framework.permissions import(
 	)
 from posts.models import Post
 from .serializers import PostDetailSerializer,PostListSerializer,PostDeleteSerializer,PostUpdateSerializer,PostCreateSerializer
+	
+
 from .permissions import IsOwnerOrReadOnly
 
 class PostCreateAPIView(CreateAPIView):
